@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}About — MediBridge{% endblock %}
+{% block content %}
+<h1 style="color:var(--teal-dark);">About {{ info.name|default:"MediBridge" }}</h1>
+<p style="color:var(--gray);max-width:700px;">
+    {{ info.about|default:"MediBridge connects patients and doctors through a single platform for appointments, payments, and AI-assisted diagnosis." }}
+</p>
+
+<h2 style="margin-top:2rem;">Departments</h2>
+<div class="card-grid">
+    {% for d in departments %}
+        <div class="info-card"><h4>{{ d.name }}</h4><p>{{ d.description }}</p></div>
+    {% empty %}
+        <p class="empty-note">No departments listed yet.</p>
+    {% endfor %}
+</div>
+
+<h2 style="margin-top:2rem;">Facilities</h2>
+<div class="card-grid">
+    {% for f in facilities %}
+        <div class="info-card"><h4>{{ f.name }}</h4><p>{{ f.description }}</p></div>
+    {% empty %}
+        <p class="empty-note">No facilities listed yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

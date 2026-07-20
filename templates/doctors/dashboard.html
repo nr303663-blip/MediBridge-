@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Doctor Dashboard — MediBridge{% endblock %}
+{% block content %}
+<h1 style="color:var(--teal-dark);">Welcome, Dr. {{ doctor.user.first_name|default:doctor.user.username }}</h1>
+<p style="color:var(--gray);">{{ doctor.specialization|default:"No specialization set" }} · {{ doctor.experience_years }} yrs experience</p>
+
+<div class="hero-actions" style="margin:1rem 0 1.5rem;">
+    <a href="{% url 'appointments:doctor_appointments' %}" class="btn-primary btn-inline">Manage Appointments</a>
+</div>
+
+<div class="auth-card" style="max-width:100%;margin-top:1.5rem;">
+    <h3 style="margin-top:0;">Pending & Recent Appointments</h3>
+    {% if appointments %}
+        <ul style="list-style:none;padding:0;">
+        {% for a in appointments %}
+            <li style="padding:0.75rem 0;border-bottom:1px solid #eef2f4;">
+                <strong>{{ a.patient.user.get_full_name|default:a.patient.user.username }}</strong>
+                — {{ a.date }} at {{ a.time }}
+                <span style="float:right;font-weight:600;color:var(--teal-dark);">{{ a.get_status_display }}</span>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p style="color:var(--gray);">No appointments yet. Approve/decline UI arrives in Phase 3.</p>
+    {% endif %}
+</div>
+{% endblock %}

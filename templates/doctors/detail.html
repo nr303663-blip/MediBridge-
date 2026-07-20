@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Dr. {{ doctor.user.get_full_name }} — MediBridge{% endblock %}
+{% block content %}
+<div class="auth-card" style="max-width:600px;">
+    <div class="doctor-avatar" style="margin:0 auto 1rem;">🩺</div>
+    <h1 style="text-align:center;">Dr. {{ doctor.user.get_full_name|default:doctor.user.username }}</h1>
+    <p style="text-align:center;color:var(--teal-dark);font-weight:600;">{{ doctor.specialization|default:"General Physician" }}</p>
+    <p style="text-align:center;color:var(--gray);">{{ doctor.experience_years }} years experience · {{ doctor.qualification }}</p>
+    <p>{{ doctor.bio|default:"No bio provided yet." }}</p>
+    <p><strong>Consultation Fee:</strong> ₹{{ doctor.consultation_fee }}</p>
+    <p><strong>Available:</strong> {{ doctor.available_days|default:"Contact for availability" }}
+        {% if doctor.available_from %} ({{ doctor.available_from }} – {{ doctor.available_to }}){% endif %}</p>
+
+    {% if user.is_authenticated and user.role == 'patient' %}
+        <a href="{% url 'appointments:book_appointment' doctor.id %}" class="btn-primary btn-inline" style="display:block;text-align:center;margin-top:1rem;">Book Appointment</a>
+    {% elif not user.is_authenticated %}
+        <a href="{% url 'accounts:login' %}" class="btn-primary btn-inline" style="display:block;text-align:center;margin-top:1rem;">Log in to Book</a>
+    {% endif %}
+</div>
+{% endblock %}

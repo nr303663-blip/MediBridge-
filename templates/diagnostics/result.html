@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Diagnosis Result — MediBridge{% endblock %}
+{% block content %}
+<div class="auth-card" style="max-width:600px;">
+    <h1>Your Result</h1>
+
+    {% if diagnosis.predicted_disease %}
+        <p class="subtitle">Most likely condition based on your symptoms:</p>
+        <h2 style="color:var(--teal-dark);margin:0.25rem 0;">{{ diagnosis.predicted_disease.name }}</h2>
+        <p style="color:var(--gray);">{{ diagnosis.predicted_disease.description }}</p>
+        <p><strong>Confidence:</strong> {% widthratio diagnosis.confidence_score 1 100 %}%</p>
+
+        {% if diagnosis.recommended_doctor %}
+            <div class="info-card" style="margin-top:1.5rem;">
+                <h4>Recommended Doctor</h4>
+                <p>Dr. {{ diagnosis.recommended_doctor.user.get_full_name|default:diagnosis.recommended_doctor.user.username }}
+                    — {{ diagnosis.recommended_doctor.specialization }}</p>
+                <a href="{% url 'appointments:book_appointment' diagnosis.recommended_doctor.id %}" class="btn-primary btn-inline" style="margin-top:0.75rem;display:inline-block;">Book Appointment</a>
+            </div>
+        {% else %}
+            <p class="empty-note">No matching doctor is available right now — try browsing all doctors.</p>
+            <a href="{% url 'doctors:doctor_search' %}" class="link-more">Browse Doctors →</a>
+        {% endif %}
+    {% else %}
+        <p class="subtitle">We couldn't confidently match your symptoms to a condition in our database.</p>
+        <p class="empty-note">Try selecting different or more specific symptoms, or browse doctors directly.</p>
+        <a href="{% url 'doctors:doctor_search' %}" class="link-more">Browse Doctors →</a>
+    {% endif %}
+
+    <p class="auth-links" style="margin-top:1.5rem;">
+        <a href="{% url 'diagnostics:diagnostics_home' %}">Run another check</a>
+    </p>
+    <p style="font-size:0.78rem;color:var(--gray);text-align:center;">
+        This tool provides informational guidance only and is not a medical diagnosis.
+    </p>
+</div>
+{% endblock %}

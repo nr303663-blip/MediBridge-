@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Diagnosis History — MediBridge{% endblock %}
+{% block content %}
+<h1 style="color:var(--teal-dark);">Your Diagnosis History</h1>
+<div class="card-grid" style="grid-template-columns:1fr;">
+    {% for d in diagnoses %}
+        <div class="appointment-row">
+            <div>
+                <strong>{{ d.predicted_disease.name|default:"No confident match" }}</strong><br>
+                <span style="color:var(--gray);font-size:0.85rem;">{{ d.created_at|date:"M d, Y" }}</span>
+            </div>
+            <a href="{% url 'diagnostics:result' d.id %}" class="link-more">View →</a>
+        </div>
+    {% empty %}
+        <p class="empty-note">No diagnosis history yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MediBridge{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <header class="site-header">
+        <a class="brand" href="{% url 'hospital:hospital_home' %}">
+            <span class="brand-icon">✚</span> MediBridge
+        </a>
+        <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+        <nav>
+            {% if user.is_authenticated %}
+                <span class="nav-user">Hi, {{ user.first_name|default:user.username }} ({{ user.role }})</span>
+                <a href="{% url 'accounts:dashboard_redirect' %}">Dashboard</a>
+                <a href="{% url 'accounts:logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">Login</a>
+                <a href="{% url 'accounts:signup_choice' %}" class="btn-nav">Sign Up</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="site-main">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message message-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; {% now "Y" %} MediBridge — Bridging Health, Connecting Lives.</p>
+    </footer>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

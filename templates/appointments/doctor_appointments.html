@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Manage Appointments — MediBridge{% endblock %}
+{% block content %}
+<h1 style="color:var(--teal-dark);">Manage Appointments</h1>
+
+<div class="card-grid" style="grid-template-columns:1fr;">
+    {% for a in appointments %}
+        <div class="appointment-row">
+            <div>
+                <strong>{{ a.patient.user.get_full_name|default:a.patient.user.username }}</strong><br>
+                <span>{{ a.date }} at {{ a.time }}</span><br>
+                {% if a.reason %}<span style="color:var(--gray);font-size:0.9rem;">{{ a.reason }}</span>{% endif %}
+            </div>
+            <div>
+                <span class="status-badge status-{{ a.status }}">{{ a.get_status_display }}</span>
+                {% if a.status == 'pending' %}
+                <form method="post" action="{% url 'appointments:approve_appointment' a.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-success-small">Approve</button>
+                </form>
+                <form method="post" action="{% url 'appointments:decline_appointment' a.id %}" style="display:inline;" onsubmit="return confirm('Decline this appointment? We\'ll try to auto-recommend another doctor to the patient.');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-danger-small">Decline</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <p class="empty-note">No appointment requests yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Patient Dashboard — MediBridge{% endblock %}
+{% block content %}
+<h1 style="color:var(--teal-dark);">Welcome, {{ patient.user.first_name|default:patient.user.username }}</h1>
+<p style="color:var(--gray);">Your patient dashboard.</p>
+
+<div class="hero-actions" style="margin:1rem 0 1.5rem;">
+    <a href="{% url 'doctors:doctor_search' %}" class="btn-primary btn-inline">Find a Doctor</a>
+    <a href="{% url 'diagnostics:diagnostics_home' %}" class="btn-secondary btn-inline">Self-Diagnosis</a>
+    <a href="{% url 'appointments:my_appointments' %}" class="btn-secondary btn-inline">All My Appointments</a>
+    <a href="{% url 'diagnostics:history' %}" class="btn-secondary btn-inline">Diagnosis History</a>
+</div>
+
+<div class="auth-card" style="max-width:100%;margin-top:1.5rem;">
+    <h3 style="margin-top:0;">Your Recent Appointments</h3>
+    {% if appointments %}
+        <ul style="list-style:none;padding:0;">
+        {% for a in appointments %}
+            <li style="padding:0.75rem 0;border-bottom:1px solid #eef2f4;">
+                <strong>Dr. {{ a.doctor.user.get_full_name|default:a.doctor.user.username }}</strong>
+                — {{ a.date }} at {{ a.time }}
+                <span style="float:right;font-weight:600;color:var(--teal-dark);">{{ a.get_status_display }}</span>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p style="color:var(--gray);">No appointments yet. Booking flow arrives in Phase 3.</p>
+    {% endif %}
+</div>
+{% endblock %}

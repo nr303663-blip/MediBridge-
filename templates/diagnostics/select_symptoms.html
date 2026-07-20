@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Self-Diagnosis — MediBridge{% endblock %}
+{% block content %}
+<div class="auth-card" style="max-width:600px;">
+    <h1>AI Self-Diagnosis</h1>
+    <p class="subtitle">Select the symptoms you're experiencing. This is not a substitute for professional medical advice.</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="field-group">
+            {{ form.symptoms.label_tag }}
+            {{ form.symptoms.errors }}
+            <div class="symptom-list">{{ form.symptoms }}</div>
+        </div>
+        <div class="field-group">
+            {{ form.other_symptoms.label_tag }}
+            {{ form.other_symptoms.errors }}
+            {{ form.other_symptoms }}
+            <p class="field-help">{{ form.other_symptoms.help_text }}</p>
+        </div>
+        <button type="submit" class="btn-primary" style="margin-top:1.25rem;">Analyze Symptoms</button>
+    </form>
+</div>
+{% endblock %}

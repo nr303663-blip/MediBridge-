@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Sign Up — MediBridge{% endblock %}
+{% block content %}
+<h1 style="text-align:center;color:var(--teal-dark);">Join MediBridge</h1>
+<p style="text-align:center;color:var(--gray);">Choose how you'd like to sign up.</p>
+
+<div class="choice-grid">
+    <a href="{% url 'accounts:patient_signup' %}" class="choice-card">
+        <div class="icon">🧑‍🤝‍🧑</div>
+        <h3>I'm a Patient</h3>
+        <p>Book appointments, use the ML self-diagnostic tool, and manage your health records.</p>
+    </a>
+    <a href="{% url 'accounts:doctor_signup' %}" class="choice-card">
+        <div class="icon">🩺</div>
+        <h3>I'm a Doctor</h3>
+        <p>Manage your dashboard, approve or decline appointments. Subject to admin approval.</p>
+    </a>
+</div>
+
+<p class="auth-links">Already have an account? <a href="{% url 'accounts:login' %}">Log in</a></p>
+{% endblock %}
